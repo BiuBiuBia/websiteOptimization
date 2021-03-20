@@ -6,6 +6,44 @@ import random
 from selenium.webdriver.firefox.options import Options
 import requests
 from selenium import webdriver
+import math
+import datetime
+import numpy as np
+
+def rule(self):
+    # 获取当前时间
+    now = datetime.datetime.now()
+    #0-星期一，1-星期二，以此类推
+    weekday=now.weekday()
+    hour=now.hour
+    # randNumList表示不同星期日子下的不同时间段的返回值的范围
+    #第一行表示星期一的，往后以此类推
+    randNumList=[
+        [[0,5],[10,20],[20,30],[10,20]],
+        [[0, 5], [10, 20], [20, 30], [10, 20]],
+        [[0, 5], [10, 20], [20, 30], [10, 20]],
+        [[0, 5], [10, 20], [20, 30], [10, 20]],
+        [[0, 5], [10, 20], [20, 30], [10, 20]],
+        [[0, 5], [10, 20], [20, 30], [10, 20]],
+        [[0, 0], [15, 20], [15, 20], [0, 1]],
+    ]
+    shape=np.array(randNumList).shape
+    # 根据当前星期日子weekday、时间段hour，获取对应的返回值
+    for i in range(shape[0]):
+        if weekday==i:
+            if (hour >= 0 and hour < 8):
+                randNum = random.randint(randNumList[i][0][0], randNumList[i][0][1])
+            elif hour >= 8 and hour < 13:
+                randNum = random.randint(randNumList[i][1][0], randNumList[i][1][1])
+            elif hour >= 13 and hour < 20:
+                randNum = random.randint(randNumList[i][2][0], randNumList[i][2][1])
+            else:
+                randNum = random.randint(randNumList[i][3][0], randNumList[i][3][1])
+    chrome_num1=math.ceil(random.randint(math.ceil(randNum/3*2),randNum)*0.8)
+    firefox_num1=math.ceil((randNum-chrome_num1)*0.8)
+    chrome_num2=math.ceil(chrome_num1/4)
+    firefox_num2=math.ceil(firefox_num1/4)
+    return chrome_num1, firefox_num1,chrome_num2,firefox_num2
 
 
 def direct_firefox(proxy):
@@ -58,8 +96,7 @@ if __name__ == "__main__":
     threadPool = ThreadPoolExecutor(max_workers=10, thread_name_prefix="thread_")
     while True:
         # 各浏览器数目
-        chrome_num = 1
-        firefox_num = 1
+        chrome_num ,firefox_num ,_,_= rule()
         # ip总数
         all_num = chrome_num + firefox_num
         ip_url = "http://api.wandoudl.com/api/ip?app_key=b342b861c460906ba70b171b7a758b0c&pack=0&num=" + str(
