@@ -6,6 +6,7 @@ import random
 from selenium.webdriver.firefox.options import Options
 import requests
 from selenium import webdriver
+from princeple import princeple
 
 
 def direct_firefox(proxy):
@@ -58,8 +59,8 @@ if __name__ == "__main__":
     threadPool = ThreadPoolExecutor(max_workers=10, thread_name_prefix="thread_")
     while True:
         # 各浏览器数目
-        chrome_num = 1
-        firefox_num = 1
+        princ=princeple()
+        chrome_num ,firefox_num ,_,_= princ.rule()
         # ip总数
         all_num = chrome_num + firefox_num
         ip_url = "http://api.wandoudl.com/api/ip?app_key=b342b861c460906ba70b171b7a758b0c&pack=0&num=" + str(
